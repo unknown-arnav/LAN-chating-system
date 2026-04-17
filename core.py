@@ -7,7 +7,6 @@ server.bind((host,port))
 server.listen()
 print("Core started")
 
-
 def func(c):
     import mysql.connector as m
     db=m.connect(host='localhost',user='root',password='system')
