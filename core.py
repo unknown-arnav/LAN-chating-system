@@ -1,6 +1,6 @@
 import threading 
 import socket
-host='10.203.66.167'
+host='172.22.102.167'
 port=55555
 server=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 server.bind((host,port))
@@ -46,6 +46,8 @@ def func(c):
                 c.send("no".encode())
         else:
             print('Unidentified operation used somewhere')
+            c.close()
+            break
 def req():
     while True:
         try:

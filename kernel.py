@@ -1,9 +1,8 @@
 import socket
 import threading
-host='10.203.66.167'
+host='172.22.102.167'
 port_1=55555
 port_2=55556
-cl=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 server=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 server.bind((host,port_2))
 server.listen()
@@ -12,7 +11,7 @@ acti=set()
 
 erro={'e1':'Invalid operator selected. Please try again.'}
 
-def homepage(c,usna):
+def homepage(c,cl,usna):
     c.send(f'!!P!!-----------welcome-{usna}----------\n==============================================================================\nyou can perform various operation like:\n1--Message a friend\n2--make an user your friend\n3--friends requests\n4--check and modify your profile\n5--logout\n==============================================================================\nYou can perform any of the above operation by:\n i--typing keywords anytime(to display the keywords enter ///keywords any time)\nii--launching a popup menu and selecting any operation(to launch popup menu type ///menu)\n=============================================================================='.encode())
     c.send("ienter any operation(1-5)::".encode())
     m=c.recv(1024).decode()
@@ -25,9 +24,7 @@ def homepage(c,usna):
 
 
 
-def signin(c):
-    cl.connect((host,port_1))
-    print("Connected to the core") 
+def signin(c,cl):
     while True:
         c.send('iEnter user Name::'.encode())
         un=c.recv(1024).decode()
@@ -46,13 +43,10 @@ def signin(c):
     if m=='1':
         usna=un
         # acti.add(usna)
-        homepage(c,usna)
+        homepage(c,cl,usna)
         # acti.remove(un)
 
-def login(c):
-    print("HERE")
-    cl.connect((host,port_1))
-    print("HERE")
+def login(c,cl):
     while True:
         c.send('iEnter user Name::'.encode())
         un=c.recv(1024).decode()
@@ -72,7 +66,7 @@ def login(c):
             m=cl.recv(1024).decode()
             if m=='yes':
                 # acti.add(un)
-                homepage(c,un)
+                homepage(c,cl,un)
                 # acti.remove(un)
                 break
             else:
@@ -82,13 +76,13 @@ def login(c):
             m=cl.recv(1024).decode()
             if m=='yes':
                 # acti.add(un)
-                homepage(c,un)
+                homepage(c,cl,un)
                 # acti.remove(un)
                 break
             else:
                 c.send('!!P!!Password incorrect\nTry Again\nEnter !@# if you forgot your password'.encode())
 
-def login_page(c):
+def login_page(c,cl):
     while True:
         l="!!P!!==============================================================================\n----------------------------------------WELCOME-------------------------------\nplease select one of the following operations\n==============================================================================\n1: To create a new account\n2:To login into an existing account"
         c.send(l.encode('ascii'))
@@ -96,20 +90,23 @@ def login_page(c):
             c.send('i::'.encode('ascii'))
             o=c.recv(1024).decode('ascii')
             if o=='1':
-                signin(c)
+                signin(c,cl)
                 break
             elif o=='2':
-                login(c)
+                login(c,cl)
                 break
             else:
                 c.send(('!!P!!'+erro['e1']).encode())
 
 def handle(c):
     try:
+        cl=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+        cl.connect((host,port_1))
+        print("Connected to core")
         while True:
             m=c.recv(1024).decode('ascii')
             if m=='hello':
-                login_page(c)
+                login_page(c,cl)
                 continue
     except:
         print("Something went wrong")
