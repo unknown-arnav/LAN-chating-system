@@ -8,7 +8,7 @@ server=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 server.bind((host,port_2))
 server.listen()
 print("Kernel started")
-acti={}
+acti=set()
 
 erro={'e1':'Invalid operator selected. Please try again.'}
 
