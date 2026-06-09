@@ -5,7 +5,7 @@ def tame(x):
     time.sleep(x)
 
 
-host='172.22.102.167'
+host='10.97.139.167'
 port=55556
 cl=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 cl.connect((host,port))
