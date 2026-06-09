@@ -46,6 +46,7 @@ def func(c):
                 c.send("no".encode())
         else:
             print('Unidentified operation used somewhere')
+            print(m)
             c.close()
             break
 def req():
