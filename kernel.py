@@ -17,13 +17,6 @@ def homepage(c,cl,usna):
     m=c.recv(1024).decode()
     c.send("!!P!!Working on this shit".encode())
 
-
-
-
-
-
-
-
 def signin(c,cl):
     while True:
         c.send('iEnter user Name::'.encode())
