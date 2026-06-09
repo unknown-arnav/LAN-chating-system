@@ -14,6 +14,9 @@ acti=set()
 
 erro={'e1':'Invalid operator selected. Please try again.'}
 
+
+
+# handling the logins
 def homepage(c,cl,usna):
     c.send(f'!!P!!-----------welcome-{usna}----------\n==============================================================================\nyou can perform various operation like:\n1--Message a friend\n2--make an user your friend\n3--friends requests\n4--check and modify your profile\n5--logout\n==============================================================================\nYou can perform any of the above operation by:\n i--typing keywords anytime(to display the keywords enter ///keywords any time)\nii--launching a popup menu and selecting any operation(to launch popup menu type ///menu)\n=============================================================================='.encode())
     c.send("ienter any operation(1-5)::".encode())
@@ -94,6 +97,10 @@ def login_page(c,cl):
             else:
                 c.send(('!!P!!'+erro['e1']).encode())
 
+
+
+
+# handling the connections
 def handle(c):
     try:
         cl=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -116,6 +123,9 @@ def req():
         th=threading.Thread(target=handle,args=(c,))
         th.start()
 
+
+
+# handling the admin controls
 para=True
 logs=[]
 def control():
@@ -147,7 +157,7 @@ def control():
         except Exception as e:
             print(f"internal error occured due to user's input. Error details{e}")
 
-
+# initiating everything
 t_main=threading.Thread(target=control,args=())
 t_main.start()
 if __name__=='__main__':req()
