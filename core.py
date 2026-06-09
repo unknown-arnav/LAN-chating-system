@@ -31,20 +31,17 @@ def func(c):
             l=m.split("::")
             cur.execute(f"select pas from users where usna='{l[0]}' limit 1")
             p=cur.fetchone()
-            if p[0]==l[1]:
-                c.send("yes".encode())
-            else:
-                c.send("no".encode())
+            if p[0]==l[1]:c.send("yes".encode())
+            else:c.send("no".encode())
         elif m.startswith("ch-sec"):
             m=m[6:]
             l=m.split("::")
             cur.execute(f"select sec from users where usna='{l[0]}' limit 1")
             p=cur.fetchone()
-            if p[0]==l[1]:
-                c.send("yes".encode())
-            else:
-                c.send("no".encode())
+            if p[0]==l[1]:c.send("yes".encode())
+            else:c.send("no".encode())
         else:
+            db.close()
             print('Unidentified operation used somewhere')
             print(m)
             c.close()
@@ -55,7 +52,6 @@ def req():
             c,a=server.accept()
             print(f'Connected with address {a}')
             th=threading.Thread(target=func,args=(c,))
-            th.daemon=True
             th.start()
         except:
             print("Error")
