@@ -46,6 +46,8 @@ def func(c):
             print(m)
             c.close()
             break
+
+
 def req():
     while True:
         try:
@@ -53,7 +55,6 @@ def req():
             print(f'Connected with address {a}')
             th=threading.Thread(target=func,args=(c,))
             th.start()
-        except:
-            print("Error")
+        except:print("Error")
         
 req()
