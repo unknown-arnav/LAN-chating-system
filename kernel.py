@@ -1,7 +1,7 @@
 import socket
 import threading
 import time
-host='192.168.175.227'
+host='10.97.139.167'
 port_1=55555
 port_2=55556
 server=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -18,16 +18,18 @@ ac_conn=set()
 erro={'e1':'Invalid operator selected. Please try again.'}
 
 #Utilities(User Seaching)
-def searc(un):
-    pass
+def searc(cl,un):
+    cl.send(f"f-un{un}")
+    m=cl.recv(2056).decode()
+    return m.split("::") if m!="NF" else []
 
 
 
+#Functionalities
+def frndreq():pass
+def msgsnd():pass
+def msglod():pass
 
-
-
-
-# handling the logins
 def homepage(c,cl,usna,a):
     while True:
         global acti
@@ -35,8 +37,13 @@ def homepage(c,cl,usna,a):
         c.send(f'!!P!!-----------welcome-{usna}----------\n==============================================================================\nyou can perform various operation like:\n1--Message a friend\n2--make an user your friend\n3--friends requests\n4--check and modify your profile\n5--logout\n==============================================================================\nYou can perform any of the above operation by:\n i--typing keywords anytime(to display the keywords enter ///keywords any time)\nii--launching a popup menu and selecting any operation(to launch popup menu type ///menu)\n=============================================================================='.encode())
         c.send("ienter any operation(1-5)::".encode())
         m=c.recv(1024).decode()
-        c.send("!!P!!Working on this shit".encode())
+        if m=='5':
+            c.send("!!P!!Logging out and returning to login page".encode())
+            acti.pop(a,None)
+            break
+        else:c.send("!!P!!Working on this shit".encode())
 
+# handling the logins
 def signin(c,cl,a):
     while True:
         c.send('iEnter user Name::'.encode())
@@ -92,15 +99,13 @@ def login_page(c,cl,a):
     while True:
         l="!!P!!==============================================================================\n----------------------------------------WELCOME-------------------------------\nplease select one of the following operations\n==============================================================================\n1: To create a new account\n2:To login into an existing account"
         c.send(l.encode('ascii'))
-        while True:
+        while True: 
+            time.sleep(0.1)
             c.send('i::'.encode('ascii'))
             o=c.recv(1024).decode('ascii')
-            if o=='1':
-                signin(c,cl,a)
-            elif o=='2':
-                login(c,cl,a)
-            else:
-                c.send(('!!P!!'+erro['e1']).encode())
+            if o=='1':signin(c,cl,a);break
+            elif o=='2':login(c,cl,a);break
+            else:c.send(('!!P!!'+erro['e1']).encode())
 
 
 
