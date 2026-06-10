@@ -1,3 +1,4 @@
+import bisect 
 import threading 
 import socket
 host='192.168.175.227'
@@ -5,13 +6,16 @@ port=55555
 server=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 server.bind((host,port))
 server.listen()
+
+import mysql.connector as m
+db=m.connect(host='localhost',user='root',password='system')
+cur=db.cursor()
+cur.execute("use chatroom")
+
+
 print("Core started")
 
 def func(c):
-    import mysql.connector as m
-    db=m.connect(host='localhost',user='root',password='system')
-    cur=db.cursor()
-    cur.execute("use chatroom")
     while True:
         m=c.recv(1024).decode()
         if m.startswith("ch-exis"):
@@ -56,5 +60,7 @@ def req():
             th=threading.Thread(target=func,args=(c,))
             th.start()
         except:print("Error")
-        
-req()
+
+
+      
+if __name__=="__main__":req()
