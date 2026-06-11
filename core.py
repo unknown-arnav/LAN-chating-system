@@ -3,7 +3,7 @@ import time
 import threading 
 import socket
 import mysql.connector as mm
-host='10.97.139.167'
+host='192.168.173.229'
 port=55555
 server=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 server.bind((host,port))
@@ -13,6 +13,13 @@ server.listen()
 sdb=mm.connect(host="localhost",user="root",password="system")
 scur=sdb.cursor()
 reg=set()
+def regi(cur,un):
+    cur.execute(f"create database {un}")
+    cur.execute(f"use {un}")
+    cur.execute("create table msg (send_to varchar(50),msg varchar(500),date date,time time)")
+    cur.execute("create table frnd (frnd varchar(50))")
+    cur.execute('create table frndreq (frndreq varchar(50),waiting_frmd date)')
+    cur.execute('create table unrd (fro varchar(50))')
 
 
 def func(c):
@@ -31,6 +38,12 @@ def func(c):
         elif m.startswith("regis"):
             l=m[5:].split('!@#')
             cur.execute(f"insert into users(usna,pas,sec) values('{l[0]}','{l[1]}','{l[2]}')")
+            cur.execute(f"create database {l[0]}")
+            cur.execute(f"use {l[0]}")
+            cur.execute("create table msg (send_to varchar(50),msg varchar(500),date date,time time)")
+            cur.execute("create table frnd (frnd varchar(50))")
+            cur.execute('create table frndreq (frndreq varchar(50),waiting_frmd date')
+            cur.execute('create table unrd (fro varchar(50))')
             cur.execute("commit")
             c.send("1".encode())
         elif m.startswith("ch-pas"):
@@ -47,6 +60,7 @@ def func(c):
             p=cur.fetchone()
             if p[0]==l[1]:c.send("yes".encode())
             else:c.send("no".encode())
+        #not finished and tested
         elif m.startswith("f-un"):
             un=m[4:]
             l=[]
