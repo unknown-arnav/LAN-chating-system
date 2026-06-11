@@ -16,17 +16,17 @@ reg=set()
 def regi(cur,un):
     cur.execute(f"create database {un}")
     cur.execute(f"use {un}")
-    cur.execute("create table msg (send_to varchar(50),msg varchar(500),date date,time time)")
-    cur.execute("create table frnd (frnd varchar(50))")
-    cur.execute('create table frndreq (frndreq varchar(50),waiting_frmd date)')
-    cur.execute('create table unrd (fro varchar(50))')
+    cur.execute("create table if not exists msg (send_to varchar(50),msg varchar(500),date date,time time)")
+    cur.execute("create table if not exists frnd (usna varchar(50))")
+    cur.execute("create table if not exists frndreq (req varchar(50),waiting_frmd date)")
+    cur.execute("create table if not exists unrd (fro varchar(50))")
 
 
 def func(c):
     db=mm.connect(host='localhost',user='root',password='system')
     cur=db.cursor()
-    cur.execute("use chatroom")
     while True:
+        cur.execute("use chatroom")
         m=c.recv(1024).decode()
         if m.startswith("ch-exis"):
             u=m[7:]        
@@ -38,12 +38,7 @@ def func(c):
         elif m.startswith("regis"):
             l=m[5:].split('!@#')
             cur.execute(f"insert into users(usna,pas,sec) values('{l[0]}','{l[1]}','{l[2]}')")
-            cur.execute(f"create database {l[0]}")
-            cur.execute(f"use {l[0]}")
-            cur.execute("create table msg (send_to varchar(50),msg varchar(500),date date,time time)")
-            cur.execute("create table frnd (frnd varchar(50))")
-            cur.execute('create table frndreq (frndreq varchar(50),waiting_frmd date')
-            cur.execute('create table unrd (fro varchar(50))')
+            regi(cur,l[0])
             cur.execute("commit")
             c.send("1".encode())
         elif m.startswith("ch-pas"):
@@ -60,7 +55,7 @@ def func(c):
             p=cur.fetchone()
             if p[0]==l[1]:c.send("yes".encode())
             else:c.send("no".encode())
-        #not finished and tested
+        #not finished not tested
         elif m.startswith("f-un"):
             un=m[4:]
             l=[]
